@@ -1,14 +1,16 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-typedef unsigned char Byte;
+#include <stdint.h>
+
+typedef uint8_t Byte;
 
 typedef struct {
     Byte r, g, b;
 } Pixel;
 
 typedef struct {
-    size_t width, height;
+    uint32_t width, height;
     Pixel* data;
 } Image;
 
