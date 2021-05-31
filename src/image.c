@@ -4,15 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Image load_image(const char* path)
+Image* load_image(const char* path)
 {
-    Image img;
-    img.data = NULL; // Pro případ, že se soubor nepodaří přečíst
+    Image* img = malloc(sizeof(*img));
+    if (!img) return NULL;
 
     // Otevřeme soubor v binárním módu
     FILE* file = fopen(path, "rb");
     if (!file)
-        return img;
+    {
+        free(img);
+        return NULL;
+    }
 
     // Přečteme první hlavičku
     BitMapHeader header;
@@ -23,7 +26,9 @@ Image load_image(const char* path)
     if (header.signature != 0x4D42)
     {
         fclose(file);
-        return img;
+        free(img);
+
+        return NULL;
     }
 
     // Přečteme druhou hlavičku
@@ -31,11 +36,13 @@ Image load_image(const char* path)
     fread(&info, sizeof(info), 1, file);
 
     // Alokujeme dostatek paměti pro data
-    Pixel* data = (Pixel*)malloc(info.width * info.height * sizeof(Pixel));
+    Pixel* data = malloc(sizeof(*data) * info.width * info.height);
     if (!data)
     {
         fclose(file);
-        return img;
+        free(img);
+
+        return NULL;
     }
 
     // Posuneme pozici čtečky na začátek dat
@@ -54,9 +61,15 @@ Image load_image(const char* path)
         rowsRead++;
     }
 
-    img.width = info.width;
-    img.height = info.height;
-    img.data = data;
+    img->width = info.width;
+    img->height = info.height;
+    img->data = data;
 
     return img;
+}
+
+void image_free(Image* img)
+{
+    free(img->data);
+    free(img);
 }

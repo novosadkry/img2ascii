@@ -15,8 +15,9 @@ int main(int argc, char const *argv[])
     printf("Zadejte cestu k souboru: ");
     scanf("%s", path);
 
-    Image img = load_image(path);
-    printf("W:%d H:%d\n", img.width, img.height);
+    Image* img = image_load(path);
+    printf("W:%d H:%d\n", img->width, img->height);
 
+    image_free(img);
     return 0;
 }

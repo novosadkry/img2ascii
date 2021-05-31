@@ -14,6 +14,7 @@ typedef struct {
     Pixel* data;
 } Image;
 
-Image load_image(const char* path);
+Image* image_load(const char* path);
+void image_free(Image* image);
 
 #endif
