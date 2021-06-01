@@ -6,6 +6,6 @@
 #define ASCII_MAP_SIZE (sizeof(ASCII_MAP) - 1)
 static char ASCII_MAP[] = " .,:;ox%#@";
 
-void ascii_convert(Image* img);
+char* ascii_convert(Image* img, int width, int height);
 
 #endif
