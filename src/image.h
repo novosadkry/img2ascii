@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
     uint32_t width, height;
-    Pixel* data;
+    Pixel data[];
 } Image;
 
 Image* image_load(const char* path);

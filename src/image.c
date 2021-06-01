@@ -4,30 +4,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Image* load_image(const char* path)
+Image* image_load(const char* path)
 {
-    Image* img = malloc(sizeof(*img));
-    if (!img) return NULL;
-
     // Otevřeme soubor v binárním módu
     FILE* file = fopen(path, "rb");
-    if (!file)
-    {
-        free(img);
-        return NULL;
-    }
+    if (!file) return NULL;
 
     // Přečteme první hlavičku
     BitMapHeader header;
     fread(&header, sizeof(header), 1, file);
 
     // Zkontrolujeme zdali hlavička souboru je platná
-    // (tj. obsahuje písmena 'BM' [0x4D42 v hex])
+    // (tj. obsahuje písmena 'BM' [42 4D v hex])
     if (header.signature != 0x4D42)
     {
         fclose(file);
-        free(img);
-
         return NULL;
     }
 
@@ -35,13 +26,11 @@ Image* load_image(const char* path)
     BitMapInfoHeader info;
     fread(&info, sizeof(info), 1, file);
 
-    // Alokujeme dostatek paměti pro data
-    Pixel* data = malloc(sizeof(*data) * info.width * info.height);
-    if (!data)
+    // Alokujeme dostatek paměti pro celý Image + data
+    Image* img = malloc(sizeof(*img) + sizeof(Pixel) * info.width * info.height);
+    if (!img)
     {
         fclose(file);
-        free(img);
-
         return NULL;
     }
 
@@ -55,7 +44,7 @@ Image* load_image(const char* path)
     int rowsRead = 0;
     while (rowsRead < info.height)
     {
-        fread(data + (rowsRead * info.width), sizeof(Pixel), info.width, file);
+        fread(img->data + (rowsRead * info.width), sizeof(Pixel), info.width, file);
         fseek(file, padding, SEEK_CUR); // Přeskočíme přebytečné bajty
 
         rowsRead++;
@@ -63,13 +52,11 @@ Image* load_image(const char* path)
 
     img->width = info.width;
     img->height = info.height;
-    img->data = data;
 
     return img;
 }
 
 void image_free(Image* img)
 {
-    free(img->data);
     free(img);
 }
