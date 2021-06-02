@@ -60,3 +60,25 @@ void image_free(Image* img)
 {
     free(img);
 }
+
+void image_resize(Image** img, uint32_t width, uint32_t height)
+{
+    float xRatio = (*img)->width / width;
+    float yRatio = (*img)->height / height;
+
+    Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * width * height);
+
+    for (uint32_t y = 0; y < height; y++)
+    {
+        for (uint32_t x = 0; x < width; x++)
+        {
+            resized->data[y * width + x] = (*img)->data[(int)(y * yRatio * width) + (int)(x * xRatio)];
+        }
+    }
+
+    image_free(*img);
+
+    resized->width = width;
+    resized->height = height;
+    *img = resized;
+}
