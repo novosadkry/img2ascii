@@ -4,7 +4,7 @@
 #include "image.h"
 
 #define ASCII_MAP_SIZE (sizeof(ASCII_MAP) - 1)
-static char ASCII_MAP[] = " .,:;ox%#@";
+static char ASCII_MAP[] = ".,:;/ox%#@";
 
 char* ascii_convert(Image* img, int width, int height);
 
