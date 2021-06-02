@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 Image* image_load(const char* path)
 {
@@ -25,6 +27,10 @@ Image* image_load(const char* path)
     // Přečteme druhou hlavičku
     BitMapInfoHeader info;
     fread(&info, sizeof(info), 1, file);
+
+    // Přetočíme data pouze pokud je výška kladná
+    bool flip = info.height > 0;
+    info.height = abs(info.height);
 
     // Alokujeme dostatek paměti pro celý Image + data
     Image* img = malloc(sizeof(*img) + sizeof(Pixel) * info.width * info.height);
@@ -50,9 +56,30 @@ Image* image_load(const char* path)
         rowsRead++;
     }
 
+    // ? Přehodit přímo při čtení ?
+    if (flip)
+    {
+        size_t rowSize = sizeof(Pixel) * info.width;
+        Pixel* tmp = malloc(rowSize);
+
+        for (uint32_t row = 0; row < info.height / 2; row++)
+        {
+            Pixel* dst = img->data + (row * info.width);
+            Pixel* src = img->data + ((info.height - row - 1) * info.width);
+
+            // Prohodíme hodnoty
+            memcpy(tmp, dst, rowSize);
+            memcpy(dst, src, rowSize);
+            memcpy(src, tmp, rowSize);
+        }
+
+        free(tmp);
+    }
+
     img->width = info.width;
     img->height = info.height;
 
+    fclose(file);
     return img;
 }
 
