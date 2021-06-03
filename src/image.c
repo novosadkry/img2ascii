@@ -91,7 +91,7 @@ Image* image_load(const char* path)
     }
 
     // Prohodíme BGR na RGB
-    for (uint32_t i = 0; i < pixelCount; i++)
+    for (size_t i = 0; i < pixelCount; i++)
     {
         uint8_t tmp = img->data[i].r;
         img->data[i].r = img->data[i].b;
