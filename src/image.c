@@ -6,6 +6,16 @@
 #include <string.h>
 #include <stdbool.h>
 
+float pixel_avg(Pixel p)
+{
+    return (p.r + p.g + p.b) / 3.0f;
+}
+
+float pixel_luminance(Pixel p)
+{
+    return (p.r * 0.2126f) + (p.g * 0.7152f) + (p.b * 0.0722f);
+}
+
 Image* image_load(const char* path)
 {
     // Otevřeme soubor v binárním módu
