@@ -1,6 +1,8 @@
 #include "ascii.h"
 #include <stdio.h>
 
+char ASCII_MAP[] = " .,:;ox%#@";
+
 char* ascii_convert(Image* img, int width, int height)
 {
     FILE* file = fopen("out.txt", "w");
