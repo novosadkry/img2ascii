@@ -42,8 +42,11 @@ Image* image_load(const char* path)
     bool flip = info.height > 0;
     info.height = abs(info.height);
 
+    // Vypočítáme celkový počet pixelů
+    size_t pixelCount = info.width * info.height;
+
     // Alokujeme dostatek paměti pro celý Image + data
-    Image* img = malloc(sizeof(*img) + sizeof(Pixel) * info.width * info.height);
+    Image* img = malloc(sizeof(*img) + sizeof(Pixel) * pixelCount);
     if (!img)
     {
         fclose(file);
@@ -66,7 +69,8 @@ Image* image_load(const char* path)
         rowsRead++;
     }
 
-    // ? Přehodit přímo při čtení ?
+    // Přetočíme
+    // TODO: Přetočit přímo při čtení
     if (flip)
     {
         size_t rowSize = sizeof(Pixel) * info.width;
@@ -86,6 +90,15 @@ Image* image_load(const char* path)
         free(tmp);
     }
 
+    // Prohodíme BGR na RGB
+    for (uint32_t i = 0; i < pixelCount; i++)
+    {
+        uint8_t tmp = img->data[i].r;
+        img->data[i].r = img->data[i].b;
+        img->data[i].b = tmp;
+    }
+
+    // Nastavíme proměnné
     img->width = info.width;
     img->height = info.height;
 
@@ -103,7 +116,8 @@ void image_resize(Image** img, uint32_t width, uint32_t height)
     float xRatio = (*img)->width / width;
     float yRatio = (*img)->height / height;
 
-    Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * width * height);
+    size_t pixelCount = width * height;
+    Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * pixelCount);
 
     for (uint32_t y = 0; y < height; y++)
     {

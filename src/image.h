@@ -3,10 +3,8 @@
 
 #include <stdint.h>
 
-typedef uint8_t Byte;
-
 typedef struct {
-    Byte r, g, b;
+    uint8_t r, g, b;
 } Pixel;
 
 typedef struct {
