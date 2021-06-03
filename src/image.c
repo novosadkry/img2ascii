@@ -38,7 +38,7 @@ Image* image_load(const char* path)
     BitMapInfoHeader info;
     fread(&info, sizeof(info), 1, file);
 
-    // Přetočíme data pouze pokud je výška kladná
+    // Přetočíme data pokud je výška kladná
     bool flip = info.height > 0;
     info.height = abs(info.height);
 
@@ -69,27 +69,6 @@ Image* image_load(const char* path)
         rowsRead++;
     }
 
-    // Přetočíme
-    // TODO: Přetočit přímo při čtení
-    if (flip)
-    {
-        size_t rowSize = sizeof(Pixel) * info.width;
-        Pixel* tmp = malloc(rowSize);
-
-        for (uint32_t row = 0; row < info.height / 2; row++)
-        {
-            Pixel* dst = img->data + (row * info.width);
-            Pixel* src = img->data + ((info.height - row - 1) * info.width);
-
-            // Prohodíme hodnoty
-            memcpy(tmp, dst, rowSize);
-            memcpy(dst, src, rowSize);
-            memcpy(src, tmp, rowSize);
-        }
-
-        free(tmp);
-    }
-
     // Prohodíme BGR na RGB
     for (size_t i = 0; i < pixelCount; i++)
     {
@@ -102,13 +81,11 @@ Image* image_load(const char* path)
     img->width = info.width;
     img->height = info.height;
 
+    // Přetočíme
+    if (flip) image_flip(img);
+
     fclose(file);
     return img;
-}
-
-void image_free(Image* img)
-{
-    free(img);
 }
 
 void image_resize(Image** img, uint32_t width, uint32_t height)
@@ -133,4 +110,28 @@ void image_resize(Image** img, uint32_t width, uint32_t height)
     resized->width = width;
     resized->height = height;
     *img = resized;
+}
+
+void image_flip(Image* img)
+{
+    size_t rowSize = sizeof(Pixel) * img->width;
+    Pixel* tmp = malloc(rowSize);
+
+    for (uint32_t row = 0; row < img->height / 2; row++)
+    {
+        Pixel* dst = img->data + (row * img->width);
+        Pixel* src = img->data + ((img->height - row - 1) * img->width);
+
+        // Prohodíme hodnoty
+        memcpy(tmp, dst, rowSize);
+        memcpy(dst, src, rowSize);
+        memcpy(src, tmp, rowSize);
+    }
+
+    free(tmp);
+}
+
+void image_free(Image* img)
+{
+    free(img);
 }
