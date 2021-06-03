@@ -90,8 +90,8 @@ Image* image_load(const char* path)
 
 void image_resize(Image** img, uint32_t width, uint32_t height)
 {
-    float xRatio = (*img)->width / width;
-    float yRatio = (*img)->height / height;
+    float xRatio = (*img)->width  / (float) width;
+    float yRatio = (*img)->height / (float) height;
 
     size_t pixelCount = width * height;
     Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * pixelCount);
