@@ -18,9 +18,9 @@ int main(int argc, char const *argv[])
 
     Image* img = image_load(path);
 
-    printf("W:%d H:%d\n", img->width, img->height);
-    //image_resize(&img, 100, 50);
-    printf("W:%d H:%d\n", img->width, img->height);
+    printf("[W:%d H:%d] -> ", img->width, img->height);
+    image_resize(&img, 150, 50);
+    printf("[W:%d H:%d]\n", img->width, img->height);
 
     ascii_convert(img, 0, 0);
 

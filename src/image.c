@@ -99,7 +99,8 @@ void image_resize(Image** img, uint32_t width, uint32_t height)
     {
         for (uint32_t x = 0; x < width; x++)
         {
-            resized->data[y * width + x] = (*img)->data[(int)(y * yRatio * width) + (int)(x * xRatio)];
+            uint32_t i = y * yRatio * (*img)->width + x * xRatio;
+            resized->data[y * width + x] = (*img)->data[i];
         }
     }
 
