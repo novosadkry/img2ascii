@@ -88,28 +88,34 @@ Image* image_load(const char* path)
     return img;
 }
 
-void image_resize(Image** img, uint32_t width, uint32_t height)
+Image* image_resize(Image* img, uint32_t newWidth, uint32_t newHeight)
 {
-    float xRatio = (*img)->width / width;
-    float yRatio = (*img)->height / height;
+    uint32_t oldWidth = img->width;
+    uint32_t oldHeight = img->height;
 
-    size_t pixelCount = width * height;
+    float xRatio = (float) oldWidth / newWidth;
+    float yRatio = (float) oldHeight / newHeight;
+
+    size_t pixelCount = newWidth * newHeight;
     Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * pixelCount);
 
-    for (uint32_t y = 0; y < height; y++)
+    for (uint32_t y = 0; y < newHeight; y++)
     {
-        for (uint32_t x = 0; x < width; x++)
+        for (uint32_t x = 0; x < newWidth; x++)
         {
-            uint32_t i = y * yRatio * (*img)->width + x * xRatio;
-            resized->data[y * width + x] = (*img)->data[i];
+            uint32_t scaledX = x * xRatio;
+            uint32_t scaledY = y * yRatio;
+
+            uint32_t i = (scaledY * oldWidth) + scaledX;
+            resized->data[y * newWidth + x] = img->data[i];
         }
     }
 
-    image_free(*img);
+    image_free(img);
 
-    resized->width = width;
-    resized->height = height;
-    *img = resized;
+    resized->width = newWidth;
+    resized->height = newHeight;
+    return resized;
 }
 
 void image_flip(Image* img)

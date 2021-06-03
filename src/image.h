@@ -16,7 +16,7 @@ float pixel_avg(Pixel p);
 float pixel_luminance(Pixel p);
 
 Image* image_load(const char* path);
-void image_resize(Image** img, uint32_t width, uint32_t height);
+Image* image_resize(Image* img, uint32_t width, uint32_t height);
 void image_flip(Image* img);
 void image_free(Image* img);
 
