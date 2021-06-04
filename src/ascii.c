@@ -3,7 +3,7 @@
 
 char ASCII_MAP[] = " .,:;ox%#@";
 
-char* ascii_convert(Image* img, int width, int height)
+char* ascii_convert(Image* img)
 {
     FILE* file = fopen("out.txt", "w");
 

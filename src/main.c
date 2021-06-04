@@ -5,6 +5,8 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "image.h"
 #include "ascii.h"
 
@@ -22,8 +24,8 @@ int main(int argc, char const *argv[])
     img = image_resize(img, 200, 100);
     printf("[W:%d H:%d]\n", img->width, img->height);
 
-    ascii_convert(img, 0, 0);
+    ascii_convert(img);
 
-    image_free(img);
+    free(img);
     return 0;
 }

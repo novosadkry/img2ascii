@@ -111,7 +111,7 @@ Image* image_resize(Image* img, uint32_t newWidth, uint32_t newHeight)
         }
     }
 
-    image_free(img);
+    free(img);
 
     resized->width = newWidth;
     resized->height = newHeight;
@@ -135,9 +135,4 @@ void image_flip(Image* img)
     }
 
     free(tmp);
-}
-
-void image_free(Image* img)
-{
-    free(img);
 }
