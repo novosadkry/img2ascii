@@ -25,7 +25,8 @@ int main(int argc, char const *argv[])
     printf("[W:%d H:%d]\n", img->width, img->height);
 
     ASCII* ascii = ascii_convert(img);
-
+    ascii_print(ascii);
+    ascii_save(ascii, "out.txt");
     free(ascii);
 
     free(img);

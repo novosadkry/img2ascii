@@ -9,7 +9,7 @@ ASCII* ascii_convert(Image* img)
     uint32_t width = img->width + 1;
     uint32_t height = img->height;
 
-    ASCII* out = malloc(sizeof(*out) + width * height);
+    ASCII* out = malloc(sizeof(*out) + width * height + 1);
     if (!out) return NULL;
 
     int i = 0;
@@ -27,7 +27,23 @@ ASCII* ascii_convert(Image* img)
         out->data[i++] = '\n';
     }
 
+    out->data[i] = '\0';
     out->width = width;
     out->height = height;
     return out;
+}
+
+void ascii_print(ASCII* ascii)
+{
+    fputs(ascii->data, stdout);
+}
+
+void ascii_save(ASCII* ascii, const char* path)
+{
+    FILE* file = fopen(path, "w");
+    if (!file) return;
+
+    fputs(ascii->data, file);
+
+    fclose(file);
 }

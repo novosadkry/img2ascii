@@ -12,5 +12,7 @@ typedef struct {
 } ASCII;
 
 ASCII* ascii_convert(Image* img);
+void ascii_print(ASCII* ascii);
+void ascii_save(ASCII* ascii, const char* path);
 
 #endif
