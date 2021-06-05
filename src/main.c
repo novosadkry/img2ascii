@@ -24,7 +24,9 @@ int main(int argc, char const *argv[])
     img = image_resize(img, 200, 100);
     printf("[W:%d H:%d]\n", img->width, img->height);
 
-    ascii_convert(img);
+    ASCII* ascii = ascii_convert(img);
+
+    free(ascii);
 
     free(img);
     return 0;
