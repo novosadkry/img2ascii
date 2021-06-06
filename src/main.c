@@ -19,6 +19,11 @@ int main(int argc, char const *argv[])
     scanf("%s", path);
 
     Image* img = image_load(path);
+    if (!img)
+    {
+        printf("Neplatny soubor!\n");
+        return 1;
+    }
 
     printf("[W:%d H:%d] -> ", img->width, img->height);
     img = image_resize(img, 200, 100);

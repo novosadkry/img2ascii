@@ -97,7 +97,9 @@ Image* image_resize(Image* img, uint32_t newWidth, uint32_t newHeight)
     float yRatio = (float) oldHeight / newHeight;
 
     size_t pixelCount = newWidth * newHeight;
+
     Image* resized = malloc(sizeof(*resized) + sizeof(Pixel) * pixelCount);
+    if (!resized) return NULL;
 
     for (uint32_t y = 0; y < newHeight; y++)
     {
@@ -121,7 +123,9 @@ Image* image_resize(Image* img, uint32_t newWidth, uint32_t newHeight)
 void image_flip(Image* img)
 {
     size_t rowSize = sizeof(Pixel) * img->width;
+
     Pixel* tmp = malloc(rowSize);
+    if (!tmp) return;
 
     for (uint32_t row = 0; row < img->height / 2; row++)
     {
