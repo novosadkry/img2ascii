@@ -6,34 +6,103 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "image.h"
 #include "ascii.h"
+
+void ask_for_resolution(uint32_t out[2])
+{
+    while (1)
+    {
+        fflush(stdin);
+        for (int i = 0; i < 2; i++) out[i] = 0;
+
+        printf("Zadejte cilove rozliseni (napr. 200x100): ");
+        scanf("%ux%u", out, out + 1);
+
+        if (out[0] != 0 && out[1] != 0)
+            break;
+    }
+}
+
+void ask_for_output(ASCII* ascii)
+{
+    while (1)
+    {
+        fflush(stdin);
+
+        char select;
+        printf("Chcete vypsat vystup do [K]onzole nebo [S]ouboru? ");
+        scanf("%c", &select);
+
+        if (toupper(select) == 'K')
+        {
+            ascii_print(ascii);
+            break;
+        }
+
+        if (toupper(select) == 'S')
+        {
+            ascii_save(ascii, "out.txt");
+            printf("Vystup byl ulozen do souboru 'out.txt'\n");
+            break;
+        }
+    }
+}
+
+Image* ask_for_image()
+{
+    while (1)
+    {
+        fflush(stdin);
+
+        char path[255];
+        printf("Zadejte cestu k souboru: ");
+        scanf("%s", path);
+
+        Image* img = image_load(path);
+        if (img) return img;
+
+        printf("Neplatny soubor!\n");
+    }
+}
 
 int main(int argc, char const *argv[])
 {
     printf("========== img2ascii ==========\n");
 
-    char path[255];
-    printf("Zadejte cestu k souboru: ");
-    scanf("%s", path);
+    Image* img = ask_for_image();
 
-    Image* img = image_load(path);
-    if (!img)
+    uint32_t newRes[2];
+    ask_for_resolution(newRes);
+
+    printf("\n--- Pocatek konverze ---\n");
+
+    if (newRes[0] != img->width || newRes[1] != img->height)
     {
-        printf("Neplatny soubor!\n");
-        return 1;
+        printf("Zmena: I:[W:%d H:%d] -> I:[W:%d H:%d]\n",
+            img->width,
+            img->height,
+            newRes[0],
+            newRes[1]);
+
+        img = image_resize(img, newRes[0], newRes[1]);
     }
 
-    printf("[W:%d H:%d] -> ", img->width, img->height);
-    img = image_resize(img, 200, 100);
-    printf("[W:%d H:%d]\n", img->width, img->height);
+    printf("Zmena: I:[W:%d H:%d] -> A:[W:%d H:%d]\n",
+        img->width,
+        img->height,
+        img->width,
+        img->height);
 
     ASCII* ascii = ascii_convert(img);
-    ascii_print(ascii);
-    ascii_save(ascii, "out.txt");
+    free(img);
+
+    printf("--- Konec konverze ---\n\n");
+
+    ask_for_output(ascii);
     free(ascii);
 
-    free(img);
     return 0;
 }
