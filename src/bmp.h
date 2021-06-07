@@ -1,12 +1,14 @@
+
+// http://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm
+
 #ifndef BMP_H
 #define BMP_H
 
 #include <stdint.h>
 
-// Nastaví rozložení dat na těsno
+// Těsné rozložení paměti
 #pragma pack(push, 1)
 
-// http://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm
 typedef struct {
     uint16_t signature;
     uint32_t fileSize;
