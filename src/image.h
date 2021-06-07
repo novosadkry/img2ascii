@@ -32,7 +32,6 @@ float pixel_luminance(Pixel p);
 /**
  * Načte obrázek ze souboru
  *
- * @note Příjmá pouze soubory .bmp
  * @param path Cesta k souboru
 */
 Image* image_load(const char* path);

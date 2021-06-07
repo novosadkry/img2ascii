@@ -4,7 +4,9 @@
 #ifndef BMP_H
 #define BMP_H
 
+#include <stdio.h>
 #include <stdint.h>
+#include "image.h"
 
 // Těsné rozložení paměti
 #pragma pack(push, 1)
@@ -29,6 +31,8 @@ typedef struct {
     uint32_t colorsUsed;
     uint32_t importantColors;
 } BitMapInfoHeader;
+
+int bmp_read(FILE* file, Image** out);
 
 #pragma pack(pop)
 
