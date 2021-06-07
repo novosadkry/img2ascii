@@ -77,32 +77,14 @@ int main(int argc, char const *argv[])
     uint32_t newRes[2];
     ask_for_resolution(newRes);
 
-    printf("\n--- Pocatek konverze ---\n");
-
     if (newRes[0] != img->width || newRes[1] != img->height)
-    {
-        printf("Zmena: I:[W:%d H:%d] -> I:[W:%d H:%d]\n",
-            img->width,
-            img->height,
-            newRes[0],
-            newRes[1]);
-
         img = image_resize(img, newRes[0], newRes[1]);
-    }
-
-    printf("Zmena: I:[W:%d H:%d] -> A:[W:%d H:%d]\n",
-        img->width,
-        img->height,
-        img->width,
-        img->height);
 
     ASCII* ascii = ascii_convert(img);
-    free(img);
-
-    printf("--- Konec konverze ---\n\n");
-
     ask_for_output(ascii);
+
     free(ascii);
+    free(img);
 
     return 0;
 }
