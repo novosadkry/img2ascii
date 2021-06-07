@@ -57,14 +57,14 @@ Image* ask_for_image()
     {
         fflush(stdin);
 
-        char path[255];
+        char path[256];
         printf("Zadejte cestu k souboru: ");
-        scanf("%s", path);
+        scanf("%255[^\n]", path);
 
         Image* img = image_load(path);
         if (img) return img;
 
-        printf("Neplatny soubor!\n");
+        perror("Neplatny soubor");
     }
 }
 
