@@ -4,69 +4,10 @@
 * PVA - img2ascii
 */
 
+#include "main.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-
-#include "image.h"
-#include "ascii.h"
-
-void ask_for_resolution(uint32_t out[2])
-{
-    while (1)
-    {
-        fflush(stdin);
-        for (int i = 0; i < 2; i++) out[i] = 0;
-
-        printf("Zadejte cilove rozliseni (napr. 200x100): ");
-        scanf("%ux%u", out, out + 1);
-
-        if (out[0] != 0 && out[1] != 0)
-            break;
-    }
-}
-
-void ask_for_output(ASCII* ascii)
-{
-    while (1)
-    {
-        fflush(stdin);
-
-        char select;
-        printf("Chcete vypsat vystup do [K]onzole nebo [S]ouboru? ");
-        scanf("%c", &select);
-
-        if (toupper(select) == 'K')
-        {
-            ascii_print(ascii);
-            break;
-        }
-
-        if (toupper(select) == 'S')
-        {
-            ascii_save(ascii, "out.txt");
-            printf("Vystup byl ulozen do souboru 'out.txt'\n");
-            break;
-        }
-    }
-}
-
-Image* ask_for_image()
-{
-    while (1)
-    {
-        fflush(stdin);
-
-        char path[256];
-        printf("Zadejte cestu k souboru: ");
-        scanf("%255[^\n]", path);
-
-        Image* img = image_load(path);
-        if (img) return img;
-
-        perror("Neplatny soubor");
-    }
-}
 
 int main(int argc, char const *argv[])
 {
@@ -87,4 +28,66 @@ int main(int argc, char const *argv[])
     free(img);
 
     return 0;
+}
+
+void ask_for_resolution(uint32_t out[2])
+{
+    while (1)
+    {
+        for (int i = 0; i < 2; i++) out[i] = 0;
+
+        printf("Zadejte cilove rozliseni (napr. 200x100): ");
+        scanf("%ux%u", out, out + 1);
+        flush_stdin();
+
+        if (out[0] != 0 && out[1] != 0)
+            break;
+    }
+}
+
+void ask_for_output(ASCII* ascii)
+{
+    while (1)
+    {
+        char select;
+        printf("Chcete vypsat vystup do [K]onzole nebo [S]ouboru? ");
+        scanf("%c", &select);
+        flush_stdin();
+
+        if (toupper(select) == 'K')
+        {
+            ascii_print(ascii);
+            break;
+        }
+
+        if (toupper(select) == 'S')
+        {
+            ascii_save(ascii, "out.txt");
+            printf("Vystup byl ulozen do souboru 'out.txt'\n");
+            break;
+        }
+    }
+}
+
+Image* ask_for_image()
+{
+    while (1)
+    {
+        char path[256];
+        printf("Zadejte cestu k souboru: ");
+        scanf("%255[^\n]", path);
+        flush_stdin();
+
+        Image* img = image_load(path);
+        if (img) return img;
+
+        perror("Neplatny soubor");
+        errno = 0;
+    }
+}
+
+void flush_stdin()
+{
+    char c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
