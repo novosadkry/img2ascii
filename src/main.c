@@ -13,17 +13,24 @@ int main(int argc, char const *argv[])
 {
     printf("========== img2ascii ==========\n");
 
+    // Zeptáme se uživatele na zdrojový obrázek
     Image* img = ask_for_image();
 
+    // Zeptáme se uživatele na rozlišení
     uint32_t newRes[2];
     ask_for_resolution(newRes);
 
+    // Pokud zadá jiné rozlišení než originální, změníme velikost
     if (newRes[0] != img->width || newRes[1] != img->height)
         img = image_resize(img, newRes[0], newRes[1]);
 
+    // Obrázek převedeme do ASCII
     ASCII* ascii = ascii_convert(img);
+
+    // Zeptáme se uživatele na způsob výstupu
     ask_for_output(ascii);
 
+    // Uvolníme struktury z paměti
     free(ascii);
     free(img);
 

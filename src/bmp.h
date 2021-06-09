@@ -8,9 +8,12 @@
 #include <stdint.h>
 #include "image.h"
 
-// Těsné rozložení paměti
+// Nastaví těsné rozložení paměti pro struktury
 #pragma pack(push, 1)
 
+/**
+ * Struktura reprezentující první hlavičku BMP
+*/
 typedef struct {
     uint16_t signature;
     uint32_t fileSize;
@@ -18,6 +21,9 @@ typedef struct {
     uint32_t dataOffset;
 } BitMapHeader;
 
+/**
+ * Struktura reprezentující druhou hlavičku BMP
+*/
 typedef struct {
     uint32_t size;
     int32_t width;
@@ -41,6 +47,7 @@ typedef struct {
 */
 int bmp_read(FILE* file, Image** out);
 
+// Vypne těsné rozložení
 #pragma pack(pop)
 
 #endif

@@ -51,7 +51,7 @@ Image* image_resize(Image* img, uint32_t newWidth, uint32_t newHeight)
     if (!resized) return NULL;
 
     // Pro každou pozici v novém obrázku
-    // zjisti její pozici v starém obrázku
+    // zjistíme odpovídající pozici ve starém obrázku
     for (uint32_t y = 0; y < newHeight; y++)
     {
         for (uint32_t x = 0; x < newWidth; x++)

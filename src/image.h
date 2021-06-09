@@ -3,10 +3,19 @@
 
 #include <stdint.h>
 
+/**
+ * Struktura reprezentující pixel
+*/
 typedef struct {
     uint8_t r, g, b;
 } Pixel;
 
+/**
+ * Struktura reprezentující obrázek
+ *
+ * Obsahuje informace o výšce a šířce obrazu
+ * a jednotlivé pixely
+*/
 typedef struct {
     uint32_t width, height;
     Pixel data[];
