@@ -32,6 +32,13 @@ typedef struct {
     uint32_t importantColors;
 } BitMapInfoHeader;
 
+/**
+ * Načte obrázek typu BMP
+ *
+ * @param file Cílový soubor
+ * @param out Návratový obrázek
+ * @returns 1 pokud proběhne úspěšně, jinak 0
+*/
 int bmp_read(FILE* file, Image** out);
 
 #pragma pack(pop)

@@ -23,8 +23,13 @@ Image* image_load(const char* path)
     if (!file) return NULL;
 
     Image* img = NULL;
+
+    // Přečteme data z BMP
     if (bmp_read(file, &img));
 
+    // else if (...)
+
+    // Soubor zavřeme
     fclose(file);
     return img;
 }
