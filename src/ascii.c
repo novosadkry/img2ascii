@@ -3,9 +3,12 @@
 #include <stdlib.h>
 
 /**
- * Mapa znaků, ze kterých se obraz vytváří
+ * Mapa znaků
  *
- * Seřazené dle intenzity vzestupně zleva
+ * Seřazená podle intenzity sestupně zleva
+ * tzn. světlé barvy vlevo
+ *      tmavé barvy vpravo
+ *
  * (lze libovolně upravit)
 */
 char ASCII_MAP[] = " .,:;ox%#@";
@@ -28,7 +31,7 @@ ASCII* ascii_convert(Image* img)
         {
             Pixel p = img->data[y * img->width + x];
 
-            // Výpočet intenzity/svítivosti
+            // Vypočteme intenzitu/svítivost
             int intensity = pixel_luminance(p);
 
             // Převedeme intenzitu na znak
