@@ -7,7 +7,7 @@ MKDIR = mkdir -p
 ODIR = obj
 SDIR = src
 
-EXE = out.exe
+EXE = img2ascii.exe
 SOURCE = $(wildcard $(SDIR)/*.c)
 HEADER = $(wildcard $(SDIR)/*.h)
 OBJECT = $(patsubst $(SDIR)/%.c, $(ODIR)/%.o, $(SOURCE))
